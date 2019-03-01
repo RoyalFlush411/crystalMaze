@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: crystalMaze
   title: The Crystal Maze
-  description: 'The Crystal Maze 1.02
+  description: 'The Crystal Maze 1.1
 
     Will you start the fans, please!
 
@@ -28,6 +28,6 @@ MonoBehaviour:
 
 
     Manual available here: https://ktane.timwi.de/HTML/The%20Crystal%20Maze.html'
-  version: 1.02
+  version: 1.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 0f3458daf2f594783b53dbd1830b1e78, type: 3}
