@@ -1173,7 +1173,10 @@ public class crystalMazeScript : MonoBehaviour
         }
         yield return new WaitForSeconds(6f);
         domeTimerOn = true;
-        StartCoroutine(ticketStage());
+        if(TPActive == true)
+        {
+            StartCoroutine(ticketStage());
+        }
         while (domeTime > 0)
         {
             yield return new WaitForSeconds(1f);
@@ -1562,6 +1565,23 @@ public class crystalMazeScript : MonoBehaviour
             {
                 yield return "sendtochat Reckless Rick: Good luck in the Crystal Dome cohorts!";
                 zoneAccess[4].OnInteract();
+                yield return new WaitForSeconds(10f);
+                while(inDome == true)
+                {
+                    if(domeTimerOn == false)
+                    {
+                        break;
+                    }
+                    yield return new WaitForSeconds(0.1f);
+                }
+                if(tokenCountValues[2] >= 15)
+                {
+                    yield return "sendtochat Reckless Rick: Congratulations cohorts! You made it through the Crystal Dome!";
+                }
+                else
+                {
+                    yield return "sendtochat Reckless Rick: Sorry cohorts! You did not survive the Crystal Dome! Better luck next time!";
+                }
             }
             yield break;
         }
@@ -1713,6 +1733,7 @@ public class crystalMazeScript : MonoBehaviour
                         while (goal != (medievalTime % 10))
                         {
                             yield return new WaitForSeconds(0.1f);
+                            yield return "trycancel Target press cancelled due to a cancel request.";
                         }
                         medievalCircle.OnInteract();
                     }
