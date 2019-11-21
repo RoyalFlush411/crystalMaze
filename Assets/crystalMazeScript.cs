@@ -158,7 +158,7 @@ public class crystalMazeScript : MonoBehaviour
         digitUpButton.OnInteract += delegate () { DigitUpPress(); return false; };
         digitDownButton.OnInteract += delegate () { DigitDownPress(); return false; };
         reverseButton.OnInteract += delegate () { ReversePress(); return false; };
-        StartCoroutine(delayDetection());
+        GetComponent<KMBombModule>().OnActivate = OnActivate;
     }
 
     void Update()
@@ -213,6 +213,11 @@ public class crystalMazeScript : MonoBehaviour
         }
         zones[0].SetActive(true);
         surface.material = surfaceOptions[0];
+    }
+
+    void OnActivate()
+    {
+        delayDetection();
     }
 
     void SelectTokenAnimations()
@@ -1386,9 +1391,8 @@ public class crystalMazeScript : MonoBehaviour
     bool TwitchPlaysActive;
     private bool TPActive;
 
-    private IEnumerator delayDetection()
+    private void delayDetection()
     {
-        yield return new WaitForSeconds(1f);
         if (TwitchPlaysActive == true)
         {
             TPActive = true;
