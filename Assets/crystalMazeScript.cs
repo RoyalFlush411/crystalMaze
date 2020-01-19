@@ -1846,29 +1846,17 @@ public class crystalMazeScript : MonoBehaviour
             else if(zones[k] == 2)
             {
                 zoneAccess[2].OnInteract();
-                while (screenText[0].color.Equals(correctColors[0]) && screenText[0].text.Equals(correctWords[0]))
-                {
-                    yield return new WaitForSeconds(0.1f);
-                }
-                while (!screenText[0].color.Equals(correctColors[0]) && !screenText[0].text.Equals(correctWords[0]))
+                while (!(screenText[0].color == correctColors[0]) || !screenText[0].text.Equals(correctWords[0]))
                 {
                     yield return new WaitForSeconds(0.1f);
                 }
                 screenButtons[0].OnInteract();
-                while (screenText[1].color.Equals(correctColors[1]) && screenText[1].text.Equals(correctWords[1]))
-                {
-                    yield return new WaitForSeconds(0.1f);
-                }
-                while (!screenText[1].color.Equals(correctColors[1]) && !screenText[1].text.Equals(correctWords[1]))
+                while (!(screenText[1].color == correctColors[1]) || !screenText[1].text.Equals(correctWords[1]))
                 {
                     yield return new WaitForSeconds(0.1f);
                 }
                 screenButtons[1].OnInteract();
-                while (screenText[2].color.Equals(correctColors[2]) && screenText[0].text.Equals(correctWords[2]))
-                {
-                    yield return new WaitForSeconds(0.1f);
-                }
-                while (!screenText[2].color.Equals(correctColors[2]) && !screenText[2].text.Equals(correctWords[2]))
+                while (!(screenText[2].color == correctColors[2]) || !screenText[2].text.Equals(correctWords[2]))
                 {
                     yield return new WaitForSeconds(0.1f);
                 }
