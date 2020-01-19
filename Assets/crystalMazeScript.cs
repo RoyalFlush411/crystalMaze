@@ -771,7 +771,6 @@ public class crystalMazeScript : MonoBehaviour
         {
             aztecOffset.text = initialOffsetDisp;
         }
-        inAztec = false;
     }
 
     public void DigitUpPress()
@@ -826,7 +825,6 @@ public class crystalMazeScript : MonoBehaviour
             }
         }
         industrialSolved = true;
-        inIndustrial = false;
     }
 
     public void MedievalCirclePress()
@@ -850,7 +848,6 @@ public class crystalMazeScript : MonoBehaviour
             Audio.PlaySoundAtTransform("drop", transform);
         }
         medievalSolved = true;
-        inMedieval = false;
     }
 
     public void FutureScreenPress(KMSelectable screen)
@@ -923,7 +920,6 @@ public class crystalMazeScript : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
             flash++;
         }
-        inFuturistic = false;
     }
 
     IEnumerator AztecTimer()
@@ -952,7 +948,6 @@ public class crystalMazeScript : MonoBehaviour
         {
             aztecOffset.text = initialOffsetDisp;
         }
-        inAztec = false;
         if (aztecWeightAdded == aztecTargetWeight)
         {
             seesaw.SetBool("right", true);
@@ -973,6 +968,7 @@ public class crystalMazeScript : MonoBehaviour
         zoneCrosses[0].enabled = true;
         zones[0].SetActive(true);
         zones[1].SetActive(false);
+        inAztec = false;
         endOfZone[0] = true;
         Debug.LogFormat("[The Crystal Maze #{0}] You have {1} crystals in total.", moduleId, collectedCrystals);
     }
@@ -1008,11 +1004,11 @@ public class crystalMazeScript : MonoBehaviour
         }
         Debug.LogFormat("[The Crystal Maze #{0}] You entered {1} as the reversal digit.", moduleId, displayedDigit);
         yield return new WaitForSeconds(1f);
-        inIndustrial = false;
         surface.material = surfaceOptions[0];
         zoneCrosses[1].enabled = true;
         zones[0].SetActive(true);
         zones[2].SetActive(false);
+        inIndustrial = false;
         endOfZone[1] = true;
         Debug.LogFormat("[The Crystal Maze #{0}] You have {1} crystals in total.", moduleId, collectedCrystals);
     }
@@ -1020,6 +1016,7 @@ public class crystalMazeScript : MonoBehaviour
     IEnumerator FutureScreen1()
     {
         int startPosition = UnityEngine.Random.Range(0, 3);
+        int tpPosition = UnityEngine.Random.Range(1, 4);
         if (!TPActive)
         {
             tpDigit1.text = "";
@@ -1030,7 +1027,12 @@ public class crystalMazeScript : MonoBehaviour
             startPosition = startPosition % 3;
             if (TPActive)
             {
-                tpDigit1.text = "" + (startPosition + 1);
+                if(tpPosition > 3)
+                {
+                    tpPosition = 1;
+                }
+                tpDigit1.text = "" + tpPosition;
+                tpPosition++;
             }
             screenText[0].text = screen1Words[startPosition];
             screenText[0].color = screen1Colors[startPosition];
@@ -1050,6 +1052,7 @@ public class crystalMazeScript : MonoBehaviour
     IEnumerator FutureScreen2()
     {
         int startPosition = UnityEngine.Random.Range(0, 3);
+        int tpPosition = UnityEngine.Random.Range(1, 4);
         if (!TPActive)
         {
             tpDigit2.text = "";
@@ -1060,7 +1063,12 @@ public class crystalMazeScript : MonoBehaviour
             startPosition = startPosition % 3;
             if (TPActive)
             {
-                tpDigit2.text = "" + (startPosition + 1);
+                if (tpPosition > 3)
+                {
+                    tpPosition = 1;
+                }
+                tpDigit2.text = "" + tpPosition;
+                tpPosition++;
             }
             screenText[1].text = screen2Words[startPosition];
             screenText[1].color = screen2Colors[startPosition];
@@ -1080,6 +1088,7 @@ public class crystalMazeScript : MonoBehaviour
     IEnumerator FutureScreen3()
     {
         int startPosition = UnityEngine.Random.Range(0, 3);
+        int tpPosition = UnityEngine.Random.Range(1, 4);
         if (!TPActive)
         {
             tpDigit3.text = "";
@@ -1090,7 +1099,12 @@ public class crystalMazeScript : MonoBehaviour
             startPosition = startPosition % 3;
             if (TPActive)
             {
-                tpDigit3.text = "" + (startPosition + 1);
+                if (tpPosition > 3)
+                {
+                    tpPosition = 1;
+                }
+                tpDigit3.text = "" + tpPosition;
+                tpPosition++;
             }
             screenText[2].text = screen3Words[startPosition];
             screenText[2].color = screen3Colors[startPosition];
@@ -1120,12 +1134,12 @@ public class crystalMazeScript : MonoBehaviour
             futuristicTimer.text = "0:" + futuristicTime.ToString("00");
         }
         futuristicSolved = true;
-        inFuturistic = false;
         yield return new WaitForSeconds(5f);
         surface.material = surfaceOptions[0];
         zoneCrosses[2].enabled = true;
         zones[0].SetActive(true);
         zones[3].SetActive(false);
+        inFuturistic = false;
         endOfZone[2] = true;
         Debug.LogFormat("[The Crystal Maze #{0}] You have {1} crystals in total.", moduleId, collectedCrystals);
     }
@@ -1152,11 +1166,11 @@ public class crystalMazeScript : MonoBehaviour
             medievalTimer.text = begin + (medievalTime % 60).ToString("00");
         }
         yield return new WaitForSeconds(3f);
-        inMedieval = false;
         surface.material = surfaceOptions[0];
         zoneCrosses[3].enabled = true;
         zones[0].SetActive(true);
         zones[4].SetActive(false);
+        inMedieval = false;
         endOfZone[3] = true;
         Debug.LogFormat("[The Crystal Maze #{0}] You have {1} crystals in total.", moduleId, collectedCrystals);
     }
@@ -1465,25 +1479,25 @@ public class crystalMazeScript : MonoBehaviour
         if (Regex.IsMatch(command, @"^\s*aztec help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            yield return "sendtochat Aztec: !# left/right <num> [Presses the left or right button 'num' times] | !# add [Presses add button] | # = Module ID on Twitch";
+            yield return "sendtochat Aztec: !{1} left/right <num> [Presses the left or right button 'num' times] | !# add [Presses add button]";
             yield break;
         }
         if (Regex.IsMatch(command, @"^\s*industrial help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            yield return "sendtochat Industrial: !# reverse <num> [Reverses the machine with the number 'num'] | # = Module ID on Twitch";
+            yield return "sendtochat Industrial: !{1} reverse <num> [Reverses the machine with the number 'num']";
             yield break;
         }
         if (Regex.IsMatch(command, @"^\s*futuristic help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            yield return "sendtochat Futuristic: !# screen <display> <digit> [Presses the specified display when the display shows the specified digit, displays are numbered 1-3 with 1 as topmost and 3 as bottommost] | # = Module ID on Twitch";
+            yield return "sendtochat Futuristic: !{1} screen <display> <digit> [Presses the specified display when the display shows the specified digit, displays are numbered 1-3 with 1 as topmost and 3 as bottommost]";
             yield break;
         }
         if (Regex.IsMatch(command, @"^\s*medieval help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            yield return "sendtochat Medieval: !# press <digit> [Presses the target when the game timer's last digit is 'digit'] | # = Module ID on Twitch";
+            yield return "sendtochat Medieval: !{1} press <digit> [Presses the target when the game timer's last digit is 'digit']";
             yield break;
         }
         if (Regex.IsMatch(command, @"^\s*aztec\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
@@ -1570,7 +1584,7 @@ public class crystalMazeScript : MonoBehaviour
                 yield return "sendtochat Reckless Rick: Good luck in the Crystal Dome cohorts!";
                 zoneAccess[4].OnInteract();
                 yield return new WaitForSeconds(10f);
-                while(inDome == true)
+                while (inDome == true)
                 {
                     if(domeTimerOn == false)
                     {
@@ -1580,6 +1594,7 @@ public class crystalMazeScript : MonoBehaviour
                 }
                 if(tokenCountValues[2] >= 15)
                 {
+                    yield return "solve";
                     yield return "sendtochat Reckless Rick: Congratulations cohorts! You made it through the Crystal Dome!";
                 }
                 else
@@ -1609,9 +1624,9 @@ public class crystalMazeScript : MonoBehaviour
             {
                 if (secondIsNum(parameters[1]))
                 {
+                    yield return null;
                     if (inAztec == true)
                     {
-                        yield return null;
                         int count = 0;
                         int goal = 0;
                         int.TryParse(parameters[1], out goal);
@@ -1635,9 +1650,9 @@ public class crystalMazeScript : MonoBehaviour
             {
                 if (secondIsNum(parameters[1]))
                 {
+                    yield return null;
                     if (inAztec == true)
                     {
-                        yield return null;
                         int count = 0;
                         int goal = 0;
                         int.TryParse(parameters[1], out goal);
@@ -1661,9 +1676,9 @@ public class crystalMazeScript : MonoBehaviour
             {
                 if (secondIsVal(parameters[1]))
                 {
+                    yield return null;
                     if (inIndustrial == true)
                     {
-                        yield return null;
                         int goal = 0;
                         int.TryParse(parameters[1], out goal);
                         while (goal != displayedDigit)
@@ -1687,9 +1702,9 @@ public class crystalMazeScript : MonoBehaviour
             {
                 if (validParams(parameters[1], parameters[2]))
                 {
+                    yield return null;
                     if (inFuturistic == true)
                     {
-                        yield return null;
                         if (parameters[1].Equals("1"))
                         {
                             while (parameters[2] != tpDigit1.text)
@@ -1729,9 +1744,9 @@ public class crystalMazeScript : MonoBehaviour
             {
                 if (secondIsVal(parameters[1]))
                 {
+                    yield return null;
                     if (inMedieval == true)
                     {
-                        yield return null;
                         int goal = 0;
                         int.TryParse(parameters[1], out goal);
                         while (goal != (medievalTime % 10))
@@ -1749,5 +1764,129 @@ public class crystalMazeScript : MonoBehaviour
             }
             yield break;
         }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        StopAllCoroutines();
+        Reset();
+        List<int> zones = new List<int>();
+        zones.Add(0);
+        zones.Add(1);
+        zones.Add(2);
+        zones.Add(3);
+        for (int i = 0; i < zones.Count; i++)
+        {
+            int temp = zones[i];
+            int randomIndex = UnityEngine.Random.Range(i, zones.Count);
+            zones[i] = zones[randomIndex];
+            zones[randomIndex] = temp;
+        }
+        for(int k = 0; k < zones.Count; k++)
+        {
+            if(zones[k] == 0)
+            {
+                zoneAccess[0].OnInteract();
+                int presser = 0;
+                int target = aztecTargetWeight;
+                if (target % 2 == 1)
+                {
+                    target--;
+                }
+                for (int i = 0; i < target; i += 2)
+                {
+                    presser += 1;
+                }
+                for (int i = 0; i < presser; i++)
+                {
+                    if (aztecButtonsScript[0].buttonValue == 2)
+                    {
+                        aztecButtons[0].OnInteract();
+                    }
+                    else if (aztecButtonsScript[1].buttonValue == 2)
+                    {
+                        aztecButtons[1].OnInteract();
+                    }
+                    yield return new WaitForSeconds(0.1f);
+                }
+                for (int i = aztecWeightAdded; i < aztecTargetWeight; i++)
+                {
+                    if (aztecButtonsScript[0].buttonValue == 1)
+                    {
+                        aztecButtons[0].OnInteract();
+                    }
+                    else if (aztecButtonsScript[1].buttonValue == 1)
+                    {
+                        aztecButtons[1].OnInteract();
+                    }
+                    yield return new WaitForSeconds(0.1f);
+                }
+                aztecAdd.OnInteract();
+                while (endOfZone[0] != true) { yield return true; yield return new WaitForSeconds(0.01f); }
+            }
+            else if(zones[k] == 1)
+            {
+                zoneAccess[1].OnInteract();
+                int rando = UnityEngine.Random.Range(0, 2);
+                while (displayedDigit != industrialZ)
+                {
+                    if (rando == 0)
+                    {
+                        digitUpButton.OnInteract();
+                    }
+                    else if (rando == 1)
+                    {
+                        digitDownButton.OnInteract();
+                    }
+                    yield return new WaitForSeconds(0.1f);
+                }
+                reverseButton.OnInteract();
+                while (endOfZone[1] != true) { yield return true; yield return new WaitForSeconds(0.01f); }
+            }
+            else if(zones[k] == 2)
+            {
+                zoneAccess[2].OnInteract();
+                while (screenText[0].color.Equals(correctColors[0]) && screenText[0].text.Equals(correctWords[0]))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                while (!screenText[0].color.Equals(correctColors[0]) && !screenText[0].text.Equals(correctWords[0]))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                screenButtons[0].OnInteract();
+                while (screenText[1].color.Equals(correctColors[1]) && screenText[1].text.Equals(correctWords[1]))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                while (!screenText[1].color.Equals(correctColors[1]) && !screenText[1].text.Equals(correctWords[1]))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                screenButtons[1].OnInteract();
+                while (screenText[2].color.Equals(correctColors[2]) && screenText[0].text.Equals(correctWords[2]))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                while (!screenText[2].color.Equals(correctColors[2]) && !screenText[2].text.Equals(correctWords[2]))
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                screenButtons[2].OnInteract();
+                while (endOfZone[2] != true) { yield return true; yield return new WaitForSeconds(0.01f); }
+            }
+            else if(zones[k] == 3)
+            {
+                zoneAccess[3].OnInteract();
+                while (medievalTime % 10 != pressTime)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                medievalCircle.OnInteract();
+                while (endOfZone[3] != true) { yield return true; yield return new WaitForSeconds(0.01f); }
+            }
+        }
+        zoneAccess[4].OnInteract();
+        while(moduleSolved != true) { yield return true; yield return new WaitForSeconds(0.01f); }
     }
 }
