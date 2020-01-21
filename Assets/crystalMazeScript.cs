@@ -1479,7 +1479,7 @@ public class crystalMazeScript : MonoBehaviour
         if (Regex.IsMatch(command, @"^\s*aztec help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            yield return "sendtochat Aztec: !{1} left/right <num> [Presses the left or right button 'num' times] | !# add [Presses add button]";
+            yield return "sendtochat Aztec: !{1} left/right <num> [Presses the left or right button 'num' times] | !{1} add [Presses add button]";
             yield break;
         }
         if (Regex.IsMatch(command, @"^\s*industrial help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
