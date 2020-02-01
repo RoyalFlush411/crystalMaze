@@ -1,1 +1,1 @@
-crystalMaze
+#[ModKit Wiki](../../wiki)

@@ -10,6 +10,10 @@ public class crystalMazeScript : MonoBehaviour
 {
     public KMBombInfo Bomb;
     public KMAudio Audio;
+    public KMColorblindMode Colorblind;
+    public TextMesh[] colorblindtexts;
+    public TextMesh[] colorblindtexts2;
+    private bool colorblindActive = false;
 
     //home
     public KMSelectable[] zoneAccess;
@@ -182,6 +186,8 @@ public class crystalMazeScript : MonoBehaviour
     void Start()
     {
         Debug.LogFormat("[The Crystal Maze #{0}] Welcome to The Crystal Maze! Reckless Rick at your service!", moduleId);
+        colorblindActive = Colorblind.ColorblindModeActive;
+        Debug.LogFormat("[The Crystal Maze #{0}] Colorblind mode: {1}", moduleId, colorblindActive);
         for (int i = 0; i <= 3; i++)
         {
             crystals[i].enabled = false;
@@ -700,6 +706,20 @@ public class crystalMazeScript : MonoBehaviour
             }
             medievalTimer.text = begin + (medievalTime % 60).ToString("00");
             surface.material = surfaceOptions[4];
+            if (colorblindActive)
+            {
+                for(int i = 0; i < 4; i++)
+                {
+                    if (circleColourName[i].Equals("brown"))
+                    {
+                        colorblindtexts[i].text = "N";
+                    }
+                    else
+                    {
+                        colorblindtexts[i].text = (circleColourName[i].ElementAt(0) + "").ToUpper();
+                    }
+                }
+            }
             zones[0].SetActive(false);
             zones[4].SetActive(true);
             inMedieval = true;
@@ -767,10 +787,6 @@ public class crystalMazeScript : MonoBehaviour
         Audio.PlaySoundAtTransform("drop", transform);
         aztecGuessText.text = aztecWeightAdded.ToString() + " KG";
         aztecSolved = true;
-        if (TPActive)
-        {
-            aztecOffset.text = initialOffsetDisp;
-        }
     }
 
     public void DigitUpPress()
@@ -944,10 +960,6 @@ public class crystalMazeScript : MonoBehaviour
             }
         }
         aztecSolved = true;
-        if (TPActive)
-        {
-            aztecOffset.text = initialOffsetDisp;
-        }
         if (aztecWeightAdded == aztecTargetWeight)
         {
             seesaw.SetBool("right", true);
@@ -964,6 +976,10 @@ public class crystalMazeScript : MonoBehaviour
         }
         Debug.LogFormat("[The Crystal Maze #{0}] You added {1}kg to your sandbag.", moduleId, aztecWeightAdded);
         yield return new WaitForSeconds(5f);
+        if (TPActive)
+        {
+            aztecOffset.text = initialOffsetDisp;
+        }
         surface.material = surfaceOptions[0];
         zoneCrosses[0].enabled = true;
         zones[0].SetActive(true);
@@ -1034,6 +1050,10 @@ public class crystalMazeScript : MonoBehaviour
                 tpDigit1.text = "" + tpPosition;
                 tpPosition++;
             }
+            if (colorblindActive)
+            {
+                colorblindtexts2[0].text = screen1ColorNames[startPosition].ElementAt(0)+"";
+            }
             screenText[0].text = screen1Words[startPosition];
             screenText[0].color = screen1Colors[startPosition];
             yield return new WaitForSeconds(0.9f);
@@ -1070,6 +1090,10 @@ public class crystalMazeScript : MonoBehaviour
                 tpDigit2.text = "" + tpPosition;
                 tpPosition++;
             }
+            if (colorblindActive)
+            {
+                colorblindtexts2[1].text = screen2ColorNames[startPosition].ElementAt(0) + "";
+            }
             screenText[1].text = screen2Words[startPosition];
             screenText[1].color = screen2Colors[startPosition];
             yield return new WaitForSeconds(0.6f);
@@ -1105,6 +1129,10 @@ public class crystalMazeScript : MonoBehaviour
                 }
                 tpDigit3.text = "" + tpPosition;
                 tpPosition++;
+            }
+            if (colorblindActive)
+            {
+                colorblindtexts2[2].text = screen3ColorNames[startPosition].ElementAt(0) + "";
             }
             screenText[2].text = screen3Words[startPosition];
             screenText[2].color = screen3Colors[startPosition];
@@ -1166,6 +1194,13 @@ public class crystalMazeScript : MonoBehaviour
             medievalTimer.text = begin + (medievalTime % 60).ToString("00");
         }
         yield return new WaitForSeconds(3f);
+        if (colorblindActive)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                colorblindtexts[i].text = "";
+            }
+        }
         surface.material = surfaceOptions[0];
         zoneCrosses[3].enabled = true;
         zones[0].SetActive(true);
@@ -1192,9 +1227,9 @@ public class crystalMazeScript : MonoBehaviour
         }
         yield return new WaitForSeconds(6f);
         domeTimerOn = true;
-        if(TPActive == true)
+        if (TPActive && tokenlist.Count != 0)
         {
-            StartCoroutine(ticketStage());
+            StartCoroutine(ticketStage(tokenlist));
         }
         while (domeTime > 0)
         {
@@ -1263,9 +1298,22 @@ public class crystalMazeScript : MonoBehaviour
         token.parentObject.SetActive(false);
     }
 
-    private IEnumerator ticketStage()
+    private IEnumerator ticketStage(List<tokenScript> tokens)
     {
-        if (collectedCrystals == 1)
+        float[] times = { 0.143f, 0.286f, 0.429f, 0.571f };
+        int timeuse = collectedCrystals - 1;
+        int count = 0;
+        while (domeTime > 0)
+        {
+            if (count < 35)
+            {
+                tokens[count].GetComponent<KMSelectable>().OnInteract();
+                count++;
+            }
+            yield return new WaitForSeconds(times[timeuse]);
+        }
+        tokenlist.Clear();
+        /**if (collectedCrystals == 1)
         {
             while (domeTime > 0)
             {
@@ -1341,7 +1389,7 @@ public class crystalMazeScript : MonoBehaviour
                 countDisplays[2].text = "" + tokenCountValues[2];
                 yield return new WaitForSeconds(0.25f);
             }
-        }
+        }*/
     }
 
     void Reset()
@@ -1405,9 +1453,11 @@ public class crystalMazeScript : MonoBehaviour
     bool TwitchPlaysActive;
     private bool TPActive;
 
+    private List<tokenScript> tokenlist = new List<tokenScript>();
+
     private void delayDetection()
     {
-        if (TwitchPlaysActive == true)
+        if (TwitchPlaysActive)
         {
             TPActive = true;
             aztecTime = 99;
@@ -1419,20 +1469,6 @@ public class crystalMazeScript : MonoBehaviour
             TPActive = false;
         }
         Debug.LogFormat("[The Crystal Maze #{0}] Twitch Plays mode: {1}", moduleId, TPActive);
-    }
-
-    private bool secondIsNum(string s)
-    {
-        int temp = 0;
-        bool check = int.TryParse(s, out temp);
-        if (check == true)
-        {
-            if (temp > 0 && temp < 201)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     private bool secondIsVal(string s)
@@ -1472,14 +1508,56 @@ public class crystalMazeScript : MonoBehaviour
     }
 
     #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} aztec/industrial/futuristic/medieval (help) [Enters the specified world (Optionally include the word help to receive the commands for each world)] | !{0} dome [Enters the crystal dome]";
+    private readonly string TwitchHelpMessage = @"!{0} aztec/industrial/futuristic/medieval (help) [Enters the specified world (Optionally include the word help to receive the commands for each world)] | !{0} dome [Enters the crystal dome] | !{0} colorblind [Toggles colorblind mode]";
     #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
+        if (Regex.IsMatch(command, @"^\s*colorblind\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return null;
+            Debug.LogFormat("[The Crystal Maze #{0}] Toggled Colorblind mode! (TP)", moduleId);
+            if (colorblindActive)
+            {
+                if (inFuturistic)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        colorblindtexts2[i].text = "";
+                    }
+                }
+                else if (inMedieval)
+                {
+                    for(int i = 0; i < 4; i++)
+                    {
+                        colorblindtexts[i].text = "";
+                    }
+                }
+                colorblindActive = false;
+            }
+            else
+            {
+                if (inMedieval)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (circleColourName[i].Equals("brown"))
+                        {
+                            colorblindtexts[i].text = "N";
+                        }
+                        else
+                        {
+                            colorblindtexts[i].text = (circleColourName[i].ElementAt(0) + "").ToUpper();
+                        }
+                    }
+                }
+                colorblindActive = true;
+            }
+            yield break;
+        }
         if (Regex.IsMatch(command, @"^\s*aztec help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            yield return "sendtochat Aztec: !{1} left/right <num> [Presses the left or right button 'num' times] | !{1} add [Presses add button]";
+            yield return "sendtochat Aztec: !{1} left/right <num> [Presses the left or right button 'num' times] | !{1} add [Presses add button] | Commands are chainable with semicolons or commas";
             yield break;
         }
         if (Regex.IsMatch(command, @"^\s*industrial help\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
@@ -1583,16 +1661,71 @@ public class crystalMazeScript : MonoBehaviour
             {
                 yield return "sendtochat Reckless Rick: Good luck in the Crystal Dome cohorts!";
                 zoneAccess[4].OnInteract();
-                yield return new WaitForSeconds(10f);
-                while (inDome == true)
+                //yield return new WaitForSeconds(10f);
+                /**while (inDome == true)
                 {
                     if(domeTimerOn == false)
                     {
                         break;
                     }
                     yield return new WaitForSeconds(0.1f);
+                }*/
+                int[] percents = { 25, 50, 75, 100 };
+                int goldct = 0;
+                int silvct = 0;
+                int rando = UnityEngine.Random.Range(0, 100);
+                if (rando < percents[collectedCrystals - 1])
+                {
+                    yield return "solve";
+                    while ((goldct == 0 && silvct == 0) || ((goldct - silvct) < 15))
+                    {
+                        goldct = UnityEngine.Random.Range(0, 36);
+                        silvct = 35 - goldct;
+                    }
                 }
-                if(tokenCountValues[2] >= 15)
+                else
+                {
+                    while ((goldct == 0 && silvct == 0) || ((goldct - silvct) >= 15))
+                    {
+                        goldct = UnityEngine.Random.Range(0, 36);
+                        silvct = 35 - goldct;
+                    }
+                }
+                List<tokenScript> goldies = new List<tokenScript>();
+                for (int i = 0; i < tokenObjects.Length; i++)
+                {
+                    if (tokenObjects[i].gold)
+                    {
+                        goldies.Add(tokenObjects[i]);
+                    }
+                }
+                List<tokenScript> silvies = new List<tokenScript>();
+                for (int i = 0; i < tokenObjects.Length; i++)
+                {
+                    if (!tokenObjects[i].gold)
+                    {
+                        silvies.Add(tokenObjects[i]);
+                    }
+                }
+                for(int i = 0; i < goldct; i++)
+                {
+                    tokenlist.Add(goldies[i]);
+                }
+                for (int i = 0; i < silvct; i++)
+                {
+                    tokenlist.Add(silvies[i]);
+                }
+                tokenlist = tokenlist.Shuffle();
+                int time = domeTime;
+                if ((goldct - silvct) >= 15)
+                {
+                    yield return "senddelayedmessage " + (9 + time) + " Reckless Rick: Congratulations cohorts! You made it through the Crystal Dome!";
+                }
+                else
+                {
+                    yield return "senddelayedmessage " + (9 + time) + " Reckless Rick: Sorry cohorts! You did not survive the Crystal Dome! Better luck next time!";
+                }
+                /**if(tokenCountValues[2] >= 15)
                 {
                     yield return "solve";
                     yield return "sendtochat Reckless Rick: Congratulations cohorts! You made it through the Crystal Dome!";
@@ -1600,76 +1733,11 @@ public class crystalMazeScript : MonoBehaviour
                 else
                 {
                     yield return "sendtochat Reckless Rick: Sorry cohorts! You did not survive the Crystal Dome! Better luck next time!";
-                }
-            }
-            yield break;
-        }
-        if (Regex.IsMatch(command, @"^\s*add\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-        {
-            yield return null;
-            if (inAztec == true)
-            {
-                aztecAdd.OnInteract();
-            }
-            else
-            {
-                yield return "sendtochat Reckless Rick: Sorry cohorts! You are not currently in the Aztec World!";
+                }*/
             }
             yield break;
         }
         string[] parameters = command.Split(' ');
-        if (Regex.IsMatch(parameters[0], @"^\s*left\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-        {
-            if(parameters.Length == 2)
-            {
-                if (secondIsNum(parameters[1]))
-                {
-                    yield return null;
-                    if (inAztec == true)
-                    {
-                        int count = 0;
-                        int goal = 0;
-                        int.TryParse(parameters[1], out goal);
-                        while (count < goal)
-                        {
-                            aztecButtons[0].OnInteract();
-                            count++;
-                            yield return new WaitForSeconds(0.1f);
-                        }
-                    }
-                    else
-                    {
-                        yield return "sendtochat Reckless Rick: Sorry cohorts! You are not currently in the Aztec World!";
-                    }
-                }
-            }
-        }
-        if (Regex.IsMatch(parameters[0], @"^\s*right\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-        {
-            if(parameters.Length == 2)
-            {
-                if (secondIsNum(parameters[1]))
-                {
-                    yield return null;
-                    if (inAztec == true)
-                    {
-                        int count = 0;
-                        int goal = 0;
-                        int.TryParse(parameters[1], out goal);
-                        while (count < goal)
-                        {
-                            aztecButtons[1].OnInteract();
-                            count++;
-                            yield return new WaitForSeconds(0.1f);
-                        }
-                    }
-                    else
-                    {
-                        yield return "sendtochat Reckless Rick: Sorry cohorts! You are not currently in the Aztec World!";
-                    }
-                }
-            }
-        }
         if (Regex.IsMatch(parameters[0], @"^\s*reverse\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (parameters.Length == 2)
@@ -1764,6 +1832,72 @@ public class crystalMazeScript : MonoBehaviour
             }
             yield break;
         }
+        //chained aztec support
+        string[] parametersaztec = command.Split(';', ',');
+        for (int i = 0; i < parametersaztec.Length; i++)
+        {
+            parametersaztec[i] = parametersaztec[i].Trim();
+            if (!Regex.IsMatch(parametersaztec[i], @"^\s*add\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) && !Regex.IsMatch(parametersaztec[i], @"^\s*left ([1-9]|[1-8][0-9]|9[0-9]|1[0-9]{2}|200)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) && !Regex.IsMatch(parametersaztec[i], @"^\s*right ([1-9]|[1-8][0-9]|9[0-9]|1[0-9]{2}|200)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+            {
+                yield break;
+            }
+        }
+        for (int i = 0; i < parametersaztec.Length; i++)
+        {
+            if (Regex.IsMatch(parametersaztec[i], @"^\s*add\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+            {
+                yield return null;
+                if (inAztec == true)
+                {
+                    aztecAdd.OnInteract();
+                }
+                else
+                {
+                    yield return "sendtochat Reckless Rick: Sorry cohorts! You are not currently in the Aztec World!";
+                }
+                yield break;
+            }
+            if (Regex.IsMatch(parametersaztec[i], @"^\s*left ([1-9]|[1-8][0-9]|9[0-9]|1[0-9]{2}|200)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+            {
+                yield return null;
+                if (inAztec == true)
+                {
+                    int count = 0;
+                    int goal = 0;
+                    int.TryParse(parametersaztec[i].Split(' ').ElementAt(1), out goal);
+                    while (count < goal)
+                    {
+                        aztecButtons[0].OnInteract();
+                        count++;
+                        yield return new WaitForSeconds(0.05f);
+                    }
+                }
+                else
+                {
+                    yield return "sendtochat Reckless Rick: Sorry cohorts! You are not currently in the Aztec World!";
+                }
+            }
+            if (Regex.IsMatch(parametersaztec[i], @"^\s*right ([1-9]|[1-8][0-9]|9[0-9]|1[0-9]{2}|200)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+            {
+                yield return null;
+                if (inAztec == true)
+                {
+                    int count = 0;
+                    int goal = 0;
+                    int.TryParse(parametersaztec[i].Split(' ').ElementAt(1), out goal);
+                    while (count < goal)
+                    {
+                        aztecButtons[1].OnInteract();
+                        count++;
+                        yield return new WaitForSeconds(0.05f);
+                    }
+                }
+                else
+                {
+                    yield return "sendtochat Reckless Rick: Sorry cohorts! You are not currently in the Aztec World!";
+                }
+            }
+        }
     }
 
     IEnumerator TwitchHandleForcedSolve()
@@ -1807,7 +1941,7 @@ public class crystalMazeScript : MonoBehaviour
                     {
                         aztecButtons[1].OnInteract();
                     }
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.05f);
                 }
                 for (int i = aztecWeightAdded; i < aztecTargetWeight; i++)
                 {
@@ -1819,7 +1953,7 @@ public class crystalMazeScript : MonoBehaviour
                     {
                         aztecButtons[1].OnInteract();
                     }
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.05f);
                 }
                 aztecAdd.OnInteract();
                 while (endOfZone[0] != true) { yield return true; yield return new WaitForSeconds(0.01f); }
@@ -1874,7 +2008,8 @@ public class crystalMazeScript : MonoBehaviour
                 while (endOfZone[3] != true) { yield return true; yield return new WaitForSeconds(0.01f); }
             }
         }
-        zoneAccess[4].OnInteract();
-        while(moduleSolved != true) { yield return true; yield return new WaitForSeconds(0.01f); }
+        tokenlist.Clear();
+        yield return ProcessTwitchCommand("dome");
+        while (moduleSolved != true) { yield return true; yield return new WaitForSeconds(0.01f); }
     }
 }
