@@ -1670,7 +1670,7 @@ public class crystalMazeScript : MonoBehaviour
                     }
                     yield return new WaitForSeconds(0.1f);
                 }*/
-                int[] percents = { 25, 50, 75, 100 };
+                int[] percents = { 10, 20, 50, 100 };
                 int goldct = 0;
                 int silvct = 0;
                 int rando = UnityEngine.Random.Range(0, 100);
