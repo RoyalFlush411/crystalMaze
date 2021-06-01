@@ -11020,7 +11020,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1930171906214560}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.06, y: 0.011190001, z: -0.0694}
+  m_LocalPosition: {x: -0.06, y: 0.011, z: -0.0694}
   m_LocalScale: {x: 0.034539998, y: 0.017270014, z: 0.86350095}
   m_Children:
   - {fileID: 4178103235034318}
@@ -12657,13 +12657,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1230069880467692}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.15071401, z: -0.014000081}
   m_LocalScale: {x: 0.71428573, y: 0.71428543, z: 1}
   m_Children: []
   m_Father: {fileID: 4803551958061752}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4691376943516544
 Transform:
   m_ObjectHideFlags: 1
@@ -13507,7 +13507,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1626694127113374}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 1.1, y: 0.5, z: 1.1}
   m_Children: []
   m_Father: {fileID: 4396540055668434}
@@ -30186,7 +30186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114213082862154134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -32098,7 +32098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114451509494119666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -32524,7 +32524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114518686353391978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -33048,7 +33048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114578063830632184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -33801,7 +33801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114668881233718946
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -34277,7 +34277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114758749606716526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -34721,7 +34721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Unlit/TransparentVertexColorUnderlay30
 --- !u!114 &114805319977366128
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -35733,7 +35733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Legacy Shaders/Transparent/Diffuse
+  - KT/Transparent/Mobile Diffuse Underlay200
 --- !u!114 &114944875056701662
 MonoBehaviour:
   m_ObjectHideFlags: 1

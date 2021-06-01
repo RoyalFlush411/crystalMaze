@@ -1770,27 +1770,29 @@ public class crystalMazeScript : MonoBehaviour
             {
                 if (validParams(parameters[1], parameters[2]))
                 {
-                    yield return null;
                     if (inFuturistic == true)
                     {
-                        if (parameters[1].Equals("1"))
+                        if (parameters[1].Equals("1") && !pressedScreens.Contains(screenButtons[0].GetComponent<ScreenLabel>().screenLabel))
                         {
+                            yield return null;
                             while (parameters[2] != tpDigit1.text)
                             {
                                 yield return new WaitForSeconds(0.1f);
                             }
                             screenButtons[0].OnInteract();
                         }
-                        else if (parameters[1].Equals("2"))
+                        else if (parameters[1].Equals("2") && !pressedScreens.Contains(screenButtons[1].GetComponent<ScreenLabel>().screenLabel))
                         {
+                            yield return null;
                             while (parameters[2] != tpDigit2.text)
                             {
                                 yield return new WaitForSeconds(0.1f);
                             }
                             screenButtons[1].OnInteract();
                         }
-                        else if (parameters[1].Equals("3"))
+                        else if (parameters[1].Equals("3") && !pressedScreens.Contains(screenButtons[2].GetComponent<ScreenLabel>().screenLabel))
                         {
+                            yield return null;
                             while (parameters[2] != tpDigit3.text)
                             {
                                 yield return new WaitForSeconds(0.1f);
