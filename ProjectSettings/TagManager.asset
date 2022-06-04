@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: CrystalMaze
+    uniqueID: 2990636349
+    locked: 0

@@ -8656,6 +8656,7 @@ GameObject:
   - component: {fileID: 64511851818271474}
   - component: {fileID: 23741590344388662}
   - component: {fileID: 114650529132389934}
+  - component: {fileID: 210608575395316920}
   m_Layer: 0
   m_Name: editableSandbag
   m_TagString: Untagged
@@ -9790,6 +9791,7 @@ GameObject:
   - component: {fileID: 64171624983172706}
   - component: {fileID: 23304030881077184}
   - component: {fileID: 114944641682809372}
+  - component: {fileID: 210461861231620954}
   m_Layer: 0
   m_Name: aztecTimerBackground
   m_TagString: Untagged
@@ -50432,3 +50434,23 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!210 &210461861231620954
+SortingGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1930171906214560}
+  m_Enabled: 1
+  m_SortingLayerID: -1304330947
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+--- !u!210 &210608575395316920
+SortingGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816920749052968}
+  m_Enabled: 1
+  m_SortingLayerID: -1304330947
+  m_SortingLayer: 1
+  m_SortingOrder: 1

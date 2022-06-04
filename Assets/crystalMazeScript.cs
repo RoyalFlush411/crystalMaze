@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using KModkit;
 
 public class crystalMazeScript : MonoBehaviour
 {
@@ -15,6 +13,7 @@ public class crystalMazeScript : MonoBehaviour
     public TextMesh[] colorblindtexts2;
     private bool colorblindActive = false;
     private bool activated = false;
+    private bool autosolving = false;
     private IDictionary<string, object> tpAPI;
 
     //home
@@ -58,7 +57,6 @@ public class crystalMazeScript : MonoBehaviour
     public TextMesh aztecGuessText;
     public TextMesh aztecTimer;
     private int aztecTime = 59;
-    private string initialOffsetDisp;
     private bool aztecSolved;
     private bool inAztec = false;
 
@@ -244,15 +242,15 @@ public class crystalMazeScript : MonoBehaviour
     {
         for (int i = 0; i < tokenAnimators.Count(); i++)
         {
-            int index = UnityEngine.Random.Range(0, 7);
+            int index = Random.Range(0, 7);
             tokenAnimators[i].runtimeAnimatorController = animationOptions[index];
         }
         for (int i = 0; i <= 34; i++)
         {
-            int index = UnityEngine.Random.Range(0, tokenAnimators.Count());
+            int index = Random.Range(0, tokenAnimators.Count());
             while (goldTokens.Contains(index))
             {
-                index = UnityEngine.Random.Range(0, tokenAnimators.Count());
+                index = Random.Range(0, tokenAnimators.Count());
             }
             goldTokens.Add(index);
             tokenObjects[goldTokens[i]].GetComponent<Renderer>().material = tokenMaterials[0];
@@ -272,10 +270,10 @@ public class crystalMazeScript : MonoBehaviour
 
     void AztecSetUp()
     {
-        aztecReset = UnityEngine.Random.Range(15, 21);
-        aztecTargetWeight = UnityEngine.Random.Range(125, 176);
+        aztecReset = Random.Range(15, 21);
+        aztecTargetWeight = Random.Range(125, 176);
         aztecTargetText.text = aztecTargetWeight.ToString() + " KG";
-        int aztecStartIndex = UnityEngine.Random.Range(0, 2);
+        int aztecStartIndex = Random.Range(0, 2);
         if (aztecStartIndex == 0)
         {
             aztecButtonsScript[0].buttonValue = 1;
@@ -300,11 +298,11 @@ public class crystalMazeScript : MonoBehaviour
     {
         for (int i = 0; i <= 3; i++)
         {
-            int colourIndex = UnityEngine.Random.Range(0, 6);
+            int colourIndex = Random.Range(0, 6);
             circles[i].material = circleColourOptions[colourIndex];
             circleColourName[i] = circleColourNameOptions[colourIndex];
 
-            int rotationIndex = UnityEngine.Random.Range(0, 2);
+            int rotationIndex = Random.Range(0, 2);
             circleAnimators[i].runtimeAnimatorController = circleAnimationOptions[rotationIndex];
             if (rotationIndex == 0)
             {
@@ -321,33 +319,33 @@ public class crystalMazeScript : MonoBehaviour
 
     void FuturisticSetUp()
     {
-        int option = UnityEngine.Random.Range(0, 2);
+        int option = Random.Range(0, 2);
         if (option == 0)
         {
-            int screen1Word1 = UnityEngine.Random.Range(0, 6);
+            int screen1Word1 = Random.Range(0, 6);
             screen1Words[0] = wordOptions[screen1Word1];
             screen1Colors[0] = colorOptions[screen1Word1];
             screen1ColorNames[0] = wordOptions[screen1Word1];
 
-            int screen1Word2 = UnityEngine.Random.Range(0, 6);
+            int screen1Word2 = Random.Range(0, 6);
             while (screen1Word2 == screen1Word1)
             {
-                screen1Word2 = UnityEngine.Random.Range(0, 6);
+                screen1Word2 = Random.Range(0, 6);
             }
             screen1Words[1] = wordOptions[screen1Word2];
             screen1Colors[1] = colorOptions[screen1Word2];
             screen1ColorNames[1] = wordOptions[screen1Word2];
 
-            int screen1Word3 = UnityEngine.Random.Range(0, 6);
+            int screen1Word3 = Random.Range(0, 6);
             while (screen1Word3 == screen1Word1 || screen1Word3 == screen1Word2)
             {
-                screen1Word3 = UnityEngine.Random.Range(0, 6);
+                screen1Word3 = Random.Range(0, 6);
             }
             screen1Words[2] = wordOptions[screen1Word3];
-            int screen1Color3 = UnityEngine.Random.Range(0, 6);
+            int screen1Color3 = Random.Range(0, 6);
             while (screen1Color3 == screen1Word3)
             {
-                screen1Color3 = UnityEngine.Random.Range(0, 6);
+                screen1Color3 = Random.Range(0, 6);
             }
             screen1Colors[2] = colorOptions[screen1Color3];
             screen1ColorNames[2] = wordOptions[screen1Color3];
@@ -357,35 +355,35 @@ public class crystalMazeScript : MonoBehaviour
         }
         else
         {
-            int screen1Word1 = UnityEngine.Random.Range(0, 6);
+            int screen1Word1 = Random.Range(0, 6);
             screen1Words[0] = wordOptions[screen1Word1];
             screen1Colors[0] = colorOptions[screen1Word1];
             screen1ColorNames[0] = wordOptions[screen1Word1];
 
-            int screen1Word2 = UnityEngine.Random.Range(0, 6);
+            int screen1Word2 = Random.Range(0, 6);
             while (screen1Word2 == screen1Word1)
             {
-                screen1Word2 = UnityEngine.Random.Range(0, 6);
+                screen1Word2 = Random.Range(0, 6);
             }
             screen1Words[1] = wordOptions[screen1Word2];
-            int screen1Color2 = UnityEngine.Random.Range(0, 6);
+            int screen1Color2 = Random.Range(0, 6);
             while (screen1Color2 == screen1Word2)
             {
-                screen1Color2 = UnityEngine.Random.Range(0, 6);
+                screen1Color2 = Random.Range(0, 6);
             }
             screen1Colors[1] = colorOptions[screen1Color2];
             screen1ColorNames[1] = wordOptions[screen1Color2];
 
-            int screen1Word3 = UnityEngine.Random.Range(0, 6);
+            int screen1Word3 = Random.Range(0, 6);
             while (screen1Word3 == screen1Word1 || screen1Word3 == screen1Word2)
             {
-                screen1Word3 = UnityEngine.Random.Range(0, 6);
+                screen1Word3 = Random.Range(0, 6);
             }
             screen1Words[2] = wordOptions[screen1Word3];
-            int screen1Color3 = UnityEngine.Random.Range(0, 6);
+            int screen1Color3 = Random.Range(0, 6);
             while (screen1Color3 == screen1Word3)
             {
-                screen1Color3 = UnityEngine.Random.Range(0, 6);
+                screen1Color3 = Random.Range(0, 6);
             }
             screen1Colors[2] = colorOptions[screen1Color3];
             screen1ColorNames[2] = wordOptions[screen1Color3];
@@ -394,33 +392,33 @@ public class crystalMazeScript : MonoBehaviour
             correctColorsLog[0] = wordOptions[screen1Word1];
         }
 
-        int option2 = UnityEngine.Random.Range(0, 2);
+        int option2 = Random.Range(0, 2);
         if (option2 == 0)
         {
-            int screen2Word1 = UnityEngine.Random.Range(0, 6);
+            int screen2Word1 = Random.Range(0, 6);
             screen2Words[0] = wordOptions[screen2Word1];
             screen2Colors[0] = colorOptions[screen2Word1];
             screen2ColorNames[0] = wordOptions[screen2Word1];
 
-            int screen2Word2 = UnityEngine.Random.Range(0, 6);
+            int screen2Word2 = Random.Range(0, 6);
             while (screen2Word2 == screen2Word1)
             {
-                screen2Word2 = UnityEngine.Random.Range(0, 6);
+                screen2Word2 = Random.Range(0, 6);
             }
             screen2Words[1] = wordOptions[screen2Word2];
             screen2Colors[1] = colorOptions[screen2Word2];
             screen2ColorNames[1] = wordOptions[screen2Word2];
 
-            int screen2Word3 = UnityEngine.Random.Range(0, 6);
+            int screen2Word3 = Random.Range(0, 6);
             while (screen2Word3 == screen2Word1 || screen2Word3 == screen2Word2)
             {
-                screen2Word3 = UnityEngine.Random.Range(0, 6);
+                screen2Word3 = Random.Range(0, 6);
             }
             screen2Words[2] = wordOptions[screen2Word3];
-            int screen2Color3 = UnityEngine.Random.Range(0, 6);
+            int screen2Color3 = Random.Range(0, 6);
             while (screen2Color3 == screen2Word3)
             {
-                screen2Color3 = UnityEngine.Random.Range(0, 6);
+                screen2Color3 = Random.Range(0, 6);
             }
             screen2Colors[2] = colorOptions[screen2Color3];
             screen2ColorNames[2] = wordOptions[screen2Color3];
@@ -430,35 +428,35 @@ public class crystalMazeScript : MonoBehaviour
         }
         else
         {
-            int screen2Word1 = UnityEngine.Random.Range(0, 6);
+            int screen2Word1 = Random.Range(0, 6);
             screen2Words[0] = wordOptions[screen2Word1];
             screen2Colors[0] = colorOptions[screen2Word1];
             screen2ColorNames[0] = wordOptions[screen2Word1];
 
-            int screen2Word2 = UnityEngine.Random.Range(0, 6);
+            int screen2Word2 = Random.Range(0, 6);
             while (screen2Word2 == screen2Word1)
             {
-                screen2Word2 = UnityEngine.Random.Range(0, 6);
+                screen2Word2 = Random.Range(0, 6);
             }
             screen2Words[1] = wordOptions[screen2Word2];
-            int screen2Color2 = UnityEngine.Random.Range(0, 6);
+            int screen2Color2 = Random.Range(0, 6);
             while (screen2Color2 == screen2Word2)
             {
-                screen2Color2 = UnityEngine.Random.Range(0, 6);
+                screen2Color2 = Random.Range(0, 6);
             }
             screen2Colors[1] = colorOptions[screen2Color2];
             screen2ColorNames[1] = wordOptions[screen2Color2];
 
-            int screen2Word3 = UnityEngine.Random.Range(0, 6);
+            int screen2Word3 = Random.Range(0, 6);
             while (screen2Word3 == screen2Word1 || screen2Word3 == screen2Word2)
             {
-                screen2Word3 = UnityEngine.Random.Range(0, 6);
+                screen2Word3 = Random.Range(0, 6);
             }
             screen2Words[2] = wordOptions[screen2Word3];
-            int screen2Color3 = UnityEngine.Random.Range(0, 6);
+            int screen2Color3 = Random.Range(0, 6);
             while (screen2Color3 == screen2Word3)
             {
-                screen2Color3 = UnityEngine.Random.Range(0, 6);
+                screen2Color3 = Random.Range(0, 6);
             }
             screen2Colors[2] = colorOptions[screen2Color3];
             screen2ColorNames[2] = wordOptions[screen2Color3];
@@ -467,33 +465,33 @@ public class crystalMazeScript : MonoBehaviour
             correctColorsLog[1] = wordOptions[screen2Word1];
         }
 
-        int option3 = UnityEngine.Random.Range(0, 2);
+        int option3 = Random.Range(0, 2);
         if (option3 == 0)
         {
-            int screen3Word1 = UnityEngine.Random.Range(0, 6);
+            int screen3Word1 = Random.Range(0, 6);
             screen3Words[0] = wordOptions[screen3Word1];
             screen3Colors[0] = colorOptions[screen3Word1];
             screen3ColorNames[0] = wordOptions[screen3Word1];
 
-            int screen3Word2 = UnityEngine.Random.Range(0, 6);
+            int screen3Word2 = Random.Range(0, 6);
             while (screen3Word2 == screen3Word1)
             {
-                screen3Word2 = UnityEngine.Random.Range(0, 6);
+                screen3Word2 = Random.Range(0, 6);
             }
             screen3Words[1] = wordOptions[screen3Word2];
             screen3Colors[1] = colorOptions[screen3Word2];
             screen3ColorNames[1] = wordOptions[screen3Word2];
 
-            int screen3Word3 = UnityEngine.Random.Range(0, 6);
+            int screen3Word3 = Random.Range(0, 6);
             while (screen3Word3 == screen3Word1 || screen3Word3 == screen3Word2)
             {
-                screen3Word3 = UnityEngine.Random.Range(0, 6);
+                screen3Word3 = Random.Range(0, 6);
             }
             screen3Words[2] = wordOptions[screen3Word3];
-            int screen3Color3 = UnityEngine.Random.Range(0, 6);
+            int screen3Color3 = Random.Range(0, 6);
             while (screen3Color3 == screen3Word3)
             {
-                screen3Color3 = UnityEngine.Random.Range(0, 6);
+                screen3Color3 = Random.Range(0, 6);
             }
             screen3Colors[2] = colorOptions[screen3Color3];
             screen3ColorNames[2] = wordOptions[screen3Color3];
@@ -503,35 +501,35 @@ public class crystalMazeScript : MonoBehaviour
         }
         else
         {
-            int screen3Word1 = UnityEngine.Random.Range(0, 6);
+            int screen3Word1 = Random.Range(0, 6);
             screen3Words[0] = wordOptions[screen3Word1];
             screen3Colors[0] = colorOptions[screen3Word1];
             screen3ColorNames[0] = wordOptions[screen3Word1];
 
-            int screen3Word2 = UnityEngine.Random.Range(0, 6);
+            int screen3Word2 = Random.Range(0, 6);
             while (screen3Word2 == screen3Word1)
             {
-                screen3Word2 = UnityEngine.Random.Range(0, 6);
+                screen3Word2 = Random.Range(0, 6);
             }
             screen3Words[1] = wordOptions[screen3Word2];
-            int screen3Color2 = UnityEngine.Random.Range(0, 6);
+            int screen3Color2 = Random.Range(0, 6);
             while (screen3Color2 == screen3Word2)
             {
-                screen3Color2 = UnityEngine.Random.Range(0, 6);
+                screen3Color2 = Random.Range(0, 6);
             }
             screen3Colors[1] = colorOptions[screen3Color2];
             screen3ColorNames[1] = wordOptions[screen3Color2];
 
-            int screen3Word3 = UnityEngine.Random.Range(0, 6);
+            int screen3Word3 = Random.Range(0, 6);
             while (screen3Word3 == screen3Word1 || screen3Word3 == screen3Word2)
             {
-                screen3Word3 = UnityEngine.Random.Range(0, 6);
+                screen3Word3 = Random.Range(0, 6);
             }
             screen3Words[2] = wordOptions[screen3Word3];
-            int screen3Color3 = UnityEngine.Random.Range(0, 6);
+            int screen3Color3 = Random.Range(0, 6);
             while (screen3Color3 == screen3Word3)
             {
-                screen3Color3 = UnityEngine.Random.Range(0, 6);
+                screen3Color3 = Random.Range(0, 6);
             }
             screen3Colors[2] = colorOptions[screen3Color3];
             screen3ColorNames[2] = wordOptions[screen3Color3];
@@ -545,9 +543,9 @@ public class crystalMazeScript : MonoBehaviour
     {
         for (int i = 0; i <= 4; i++)
         {
-            chosenSerialIndices[i] = UnityEngine.Random.Range(1, 27);
+            chosenSerialIndices[i] = Random.Range(1, 27);
         }
-        chosenSerialIndices[2] = UnityEngine.Random.Range(6, 11);
+        chosenSerialIndices[2] = Random.Range(6, 11);
         for (int i = 0; i <= 4; i++)
         {
             chosenSerialLetters[i] = industrialLetterOptions[chosenSerialIndices[i]];
@@ -611,7 +609,6 @@ public class crystalMazeScript : MonoBehaviour
             {
                 pressTime += primeOptions[11];
             }
-            Debug.Log(pressTime);
         }
         pressTime = (pressTime % 10);
     }
@@ -640,7 +637,7 @@ public class crystalMazeScript : MonoBehaviour
             zone.AddInteractionPunch();
             Audio.PlaySoundAtTransform("sting", transform);
             industrialTimer.text = "0:" + (industrialTime % 60).ToString("00");
-            displayedDigit = UnityEngine.Random.Range(0, 10);
+            displayedDigit = Random.Range(0, 10);
             displayedDigitText.text = displayedDigit.ToString();
             surface.material = surfaceOptions[2];
             zones[0].SetActive(false);
@@ -986,8 +983,8 @@ public class crystalMazeScript : MonoBehaviour
 
     IEnumerator FutureScreen1()
     {
-        int startPosition = UnityEngine.Random.Range(0, 3);
-        int tpPosition = UnityEngine.Random.Range(1, 4);
+        int startPosition = Random.Range(0, 3);
+        int tpPosition = Random.Range(1, 4);
         if (!TPActive)
         {
             tpDigit1.text = "";
@@ -1026,8 +1023,8 @@ public class crystalMazeScript : MonoBehaviour
 
     IEnumerator FutureScreen2()
     {
-        int startPosition = UnityEngine.Random.Range(0, 3);
-        int tpPosition = UnityEngine.Random.Range(1, 4);
+        int startPosition = Random.Range(0, 3);
+        int tpPosition = Random.Range(1, 4);
         if (!TPActive)
         {
             tpDigit2.text = "";
@@ -1066,8 +1063,8 @@ public class crystalMazeScript : MonoBehaviour
 
     IEnumerator FutureScreen3()
     {
-        int startPosition = UnityEngine.Random.Range(0, 3);
-        int tpPosition = UnityEngine.Random.Range(1, 4);
+        int startPosition = Random.Range(0, 3);
+        int tpPosition = Random.Range(1, 4);
         if (!TPActive)
         {
             tpDigit3.text = "";
@@ -1210,7 +1207,7 @@ public class crystalMazeScript : MonoBehaviour
         }
         domeTimerOn = false;
         inDome = false;
-        if (TPActive && !Application.isEditor)
+        if (TPActive && !Application.isEditor && !autosolving)
         {
             if (tokenCountValues[2] >= 10)
                 tpAPI["ircConnectionSendMessage"] = "Reckless Rick: Congratulations cohorts! You made it through the Crystal Dome!";
@@ -1527,12 +1524,14 @@ public class crystalMazeScript : MonoBehaviour
             }
             else
             {
-                yield return "sendtochat Reckless Rick: Good luck in the Crystal Dome cohorts!";
+                if (!autosolving)
+                    yield return "sendtochat Reckless Rick: Good luck in the Crystal Dome cohorts!";
                 zoneAccess[4].OnInteract();
             }
             yield break;
         }
-        string[] parameters = command.Split(' ');
+        string removeSpaces = Regex.Replace(command, @"\s+", " ");
+        string[] parameters = removeSpaces.Split(' ');
         if (Regex.IsMatch(parameters[0], @"^\s*grab\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (parameters.Length >= 2)
@@ -1620,7 +1619,7 @@ public class crystalMazeScript : MonoBehaviour
                         }
                         else
                         {
-                            int rand = UnityEngine.Random.Range(0, 2);
+                            int rand = Random.Range(0, 2);
                             for (int i = 0; i < (rand == 0 ? ct1 : ct2); i++)
                             {
                                 if (rand == 0)
@@ -1792,9 +1791,11 @@ public class crystalMazeScript : MonoBehaviour
 
     IEnumerator TwitchHandleForcedSolve()
     {
+        autosolving = true;
+        Debug.LogFormat("[The Crystal Maze #{0}] Resetting and autosolving per request of Twitch Plays.", moduleId);
         StopAllCoroutines();
         Reset();
-        int selectedZone = UnityEngine.Random.Range(0, 4);
+        int selectedZone = Random.Range(0, 4);
         if (selectedZone == 0)
         {
             zoneAccess[0].OnInteract();
@@ -1886,5 +1887,6 @@ public class crystalMazeScript : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         while (moduleSolved != true) { yield return true; }
+        autosolving = false;
     }
 }
